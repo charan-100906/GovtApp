@@ -6,6 +6,14 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final bool obscureText;
   final IconData? prefixIcon;
+  final Widget? suffixIcon;
+  final String? hintText;
+  final String? Function(String?)? validator;
+  final bool enabled;
+  final int maxLines;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onTap;
 
   const CustomTextField({
     super.key,
@@ -14,6 +22,14 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
     this.prefixIcon,
+    this.suffixIcon,
+    this.hintText,
+    this.validator,
+    this.enabled = true,
+    this.maxLines = 1,
+    this.textInputAction,
+    this.onChanged,
+    this.onTap,
   });
 
   @override
@@ -22,13 +38,19 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
+      enabled: enabled,
+      maxLines: obscureText ? 1 : maxLines,
+      textInputAction: textInputAction,
+      onChanged: onChanged,
+      onTap: onTap,
+      validator: validator,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        hintText: hintText,
+        prefixIcon: prefixIcon != null
+            ? Icon(prefixIcon)
+            : null,
+        suffixIcon: suffixIcon,
       ),
     );
   }

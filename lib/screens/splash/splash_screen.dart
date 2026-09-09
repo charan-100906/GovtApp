@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../core/constants/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -9,44 +13,78 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
-    _navigateToNext();
+
+    debugPrint('SPLASH: Started');
+
+    _timer = Timer(const Duration(seconds: 3), () {
+      debugPrint('SPLASH: 3 seconds completed');
+
+      if (!mounted) {
+        debugPrint('SPLASH: Widget is not mounted');
+        return;
+      }
+
+      debugPrint('SPLASH: Navigating to ${AppRoutes.roleSelection}');
+
+      context.go(AppRoutes.roleSelection);
+    });
   }
 
-  void _navigateToNext() async {
-    await Future.delayed(const Duration(seconds: 3));
-    if (mounted) {
-      Navigator.pushReplacementNamed(context, AppRoutes.roleSelection);
-    }
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: const Color(0xFF005691),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-              child: Icon(Icons.local_hospital_rounded, size: 64, color: Theme.of(context).primaryColor),
+              width: 150,
+              height: 150,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.local_hospital,
+                  size: 70,
+                  color: Color(0xFF005691),
+                ),
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 35),
             const Text(
               'Government e-Hospital',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             const Text(
               'Public Health Services Portal',
-              style: TextStyle(fontSize: 14, color: Colors.white70),
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 21,
+              ),
             ),
-            const SizedBox(height: 48),
-            const CircularProgressIndicator(color: Colors.white),
+            const SizedBox(height: 60),
+            const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
           ],
         ),
       ),
